@@ -81,7 +81,6 @@ def win3(x,t):
     
     
     
-    
 def TermStateCheck(state):
     state_array = np.asanyarray(sess.run(state))
     x1 = np.empty([3,3],dtype = np.int32)
