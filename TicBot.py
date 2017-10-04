@@ -116,9 +116,13 @@ def TermStateCheck(state):
 
 def Qvalue(state):
     temp = []
-    z1 = sess.run(state)
-    temp.append(z1)
-    while not(TermStateCheck(z1)):
+    while not(TermStateCheck(state)):
+        temp.append(sess.run(state))
+        temp.append(sess.run(TakeAction(state)))
+        temp.append(0)
+        state = tf.add(state,TakeAction(state))
+    if TermStateCheck(state):
+        print(temp)
         
         
 working_state = RandomState()
