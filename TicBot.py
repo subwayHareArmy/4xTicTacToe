@@ -22,7 +22,7 @@
 import tensorflow as tf
 import numpy as np
 sess = tf.Session()
-working_state = tf.Variable(tf.random_uniform([4,4],0,3,dtype=tf.int32))
+working_state = tf.Variable(tf.random_uniform([4,4],0,3,dtype=tf.int32))  
 init = tf.global_variables_initializer()
 sess.run(init)
 
@@ -45,7 +45,7 @@ def RandomState():
                     break
     return z1
     
-def TakeAction(state):
+def TakeAction(state,playernum):
     action = tf.Variable(tf.zeros([4,4],dtype=tf.int32))
     init_new_vars_op = tf.initialize_variables([action])
     sess.run(init_new_vars_op)
@@ -54,7 +54,7 @@ def TakeAction(state):
         i = np.random.randint(0,3)
         j = np.random.randint(0,3)
         if(sess.run(state)[i][j]==0):
-            z[i][j] = 1
+            z[i][j] = playernum
             z_tf = tf.convert_to_tensor(z,dtype=tf.int32)
             action = tf.add(z_tf,action)
             break
@@ -78,6 +78,7 @@ def win3(x,t):
     if x[0][2] == t and x[1][1] == t and x[2][0] == t:
         return True
     return False
+    
     
     
     
@@ -112,20 +113,33 @@ def TermStateCheck(state):
         return True
     if win3(x1,2):
         return True
-    return False            
+    return False   
+                 
 
-def Qvalue(state):
+    
+def QvalueReward(state):
     temp = []
     while not(TermStateCheck(state)):
         temp.append(sess.run(state))
-        temp.append(sess.run(TakeAction(state)))
+        action = TakeAction(state,1)
+        temp.append(sess.run(action))
         temp.append(0)
-        state = tf.add(state,TakeAction(state))
-    if TermStateCheck(state):
-        print(temp)
-        
-        
+        state = tf.add(state,action)
+        temp.append(sess.run(state))
+        action = TakeAction(state,2)
+        temp.append(sess.run(action))
+        temp.append(0)
+        state = tf.add(state,action)
+    length = len(temp)
+    reward1 = 1
+    reward2 = -1
+    for i in range(length-1,0,-6):
+        temp[i] = reward1
+        temp[i-3] = reward2
+        reward1*=0.9
+        reward2*=0.9
+    print(temp)
+            
 working_state = RandomState()
-print(sess.run(working_state))    
-Qvalue(working_state)
+QvalueReward(working_state)
 sess.close()
