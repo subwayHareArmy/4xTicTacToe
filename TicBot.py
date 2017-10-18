@@ -149,11 +149,13 @@ def QvalueReward(state):
             
 working_state = RandomState()
 
+'''this part is for updating the Q table using the Q table algorithm, but I dont think its right. Just check what I've coded'''
+
 def QtableUpdate(table,wstate):
     buffer = QvalueReward(wstate)
     i = 0
-    j = 0
-    r = 0
+    j = 1
+    r = 2
     while(r<len(buffer)):
         state = buffer[i]
         action = buffer[j]
@@ -165,10 +167,17 @@ def QtableUpdate(table,wstate):
                 if table[row][i] == action:
                     column = i
             state = tf.add(state,action)
-         if(any(state in subl for subl in table)):
+        if(any(state in subl for subl in table)):
             index = index_2d(table,state)
             row1 = index[0]
         index = index_2d(table[row1],max( subl for subl in table[row1]))
         column1 = index[1]
-            
+        table[row][column]=table[row][column]+0.25*(reward+0.9*table[row1][column1]-table[row][column])
+        i+=3
+        j+=3
+        r+=3
+        
+'''end of Q-LEARNING TABLE part'''
+
+
 sess.close()
