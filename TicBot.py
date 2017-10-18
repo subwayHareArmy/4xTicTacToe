@@ -140,11 +140,9 @@ def QvalueReward(state):
     length = len(temp)
     reward1 = 1
     reward2 = -1
-    for i in range(length-1,0,-6):
-        temp[i] = reward1
-        temp[i-3] = reward2
-        reward1*=0.9
-        reward2*=0.9
+    i = length-1
+    temp[i] = reward1
+    temp[i-3] = reward2
     return temp
             
 working_state = RandomState()
