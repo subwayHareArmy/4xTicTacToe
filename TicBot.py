@@ -21,10 +21,17 @@
 
 import tensorflow as tf
 import numpy as np
+tf.reset_default_graph()
 sess = tf.Session()
 working_state = tf.Variable(tf.random_uniform([4,4],0,3,dtype=tf.int32))  
+Qtable = []
 init = tf.global_variables_initializer()
 sess.run(init)
+
+def index_2d(myList, v):
+    for i, x in enumerate(myList):
+        if v in x:
+            return (i, x.index(v))
 
 def tf_count(t, val):
     elements_equal_to_value = tf.equal(t, val)
@@ -138,8 +145,30 @@ def QvalueReward(state):
         temp[i-3] = reward2
         reward1*=0.9
         reward2*=0.9
-    print(temp)
+    return temp
             
 working_state = RandomState()
-QvalueReward(working_state)
+
+def QtableUpdate(table,wstate):
+    buffer = QvalueReward(wstate)
+    i = 0
+    j = 0
+    r = 0
+    while(r<len(buffer)):
+        state = buffer[i]
+        action = buffer[j]
+        reward = buffer[r]
+        if(any(state in subl for subl in table)):
+            index = index_2d(table,state)
+            row = index[0]
+            for k in range(1,len(table[0])):
+                if table[row][i] == action:
+                    column = i
+            state = tf.add(state,action)
+         if(any(state in subl for subl in table)):
+            index = index_2d(table,state)
+            row1 = index[0]
+        index = index_2d(table[row1],max( subl for subl in table[row1]))
+        column1 = index[1]
+            
 sess.close()
