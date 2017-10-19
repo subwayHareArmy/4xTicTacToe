@@ -121,8 +121,8 @@ def TermStateCheck(state):
     if win3(x1,2):
         return True
     return False   
-                 
-
+                
+    
     
 def QvalueReward(state):
     temp = []
@@ -147,35 +147,63 @@ def QvalueReward(state):
             
 working_state = RandomState()
 
-'''this part is for updating the Q table using the Q table algorithm, but I dont think its right. Just check what I've coded'''
+''' possibilities:
+    s1 exists s2 exists
+    s1 exists s2 doesnt
+    s1 doesnt exist s2 exists
+    s1 doesnt exist s2 doest exist
+    how to code this out???
+   bruteforce the only way???'''
 
 def QtableUpdate(table,wstate):
     buffer = QvalueReward(wstate)
-    i = 0
-    j = 1
-    r = 2
-    while(r<len(buffer)):
-        state = buffer[i]
-        action = buffer[j]
-        reward = buffer[r]
-        if(any(state in subl for subl in table)):
-            index = index_2d(table,state)
-            row = index[0]
-            for k in range(1,len(table[0])):
-                if table[row][i] == action:
-                    column = i
-            state = tf.add(state,action)
-        if(any(state in subl for subl in table)):
-            index = index_2d(table,state)
-            row1 = index[0]
-        index = index_2d(table[row1],max( subl for subl in table[row1]))
-        column1 = index[1]
-        table[row][column]=table[row][column]+0.25*(reward+0.9*table[row1][column1]-table[row][column])
+    i=0
+    j=1
+    k=2
+    while(k<len(buffer)):
+        s1=buffer[i]
+        a1=buffer[j]
+        r1=buffer[k]
+        s2 = tf.add(s1,a1)
+        if(any(s1 in subl for subl in table)):
+            if(any(s2 in subl for subl in table)):
+                row1 = index_2d(table,s1)[0]
+                row2 = index_2d(table,s1)[0]
+                col1 = getActionNumber(a1)
+                table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*max(table[row2][1])-table[row1][col1])
+            if(not(any(s2 in subl for subl in table))):
+                table.append(np.zeros(17,dtype=np.int32))
+                table[len(table)-1][0]=s2
+                row1 = index_2d(table,s1)[0]
+                row2 = index_2d(table,s1)[0]
+                col1 = getActionNumber(a1)
+                table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*max(table[row2][1])-table[row1][col1])
+        if(not(any(s1 in subl for subl in table))):
+            if(any(s2 in subl for subl in table)):
+                table.append(np.zeros(17,dtype=np.int32))
+                table[len(table)-1][0]=s1
+                row1 = index_2d(table,s1)[0]
+                row2 = index_2d(table,s1)[0]
+                col1 = getActionNumber(a1)
+                table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*max(table[row2][1])-table[row1][col1])      
+            if(not(any(s2 in subl for subl in table))):
+                table.append(np.zeros(17,dtype=np.int32))
+                table[len(table)-1][0]=s2
+                table.append(np.zeros(17,dtype=np.int32))
+                table[len(table)-1][0]=s1
+                row1 = index_2d(table,s1)[0]
+                row2 = index_2d(table,s1)[0]
+                col1 = getActionNumber(a1)
+                table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*max(table[row2][1])-table[row1][col1])            
         i+=3
-        j+=3
-        r+=3
-        
+        j==3
+        k+=3
+
 '''end of Q-LEARNING TABLE part'''
 
+'''just to unify all the action columns, to easily make state-action pairs'''
+def getActionNumber(action):
+'''dude figure this out easy only, let it return 1 for some defined action, 2 for some other action and so on...
+therefore it can return number from 1 to 16'''
 
 sess.close()
