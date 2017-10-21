@@ -128,7 +128,7 @@ sess.run(init)
 
 def index_2d(myList, v):
     for i, x in enumerate(myList):
-        if v in x:
+        if (v==x):
             return (i, x.index(v))
 
 def tf_count(t, val):
@@ -262,7 +262,7 @@ def QtableUpdate(table,wstate):
                 col1 = getActionNumber(a1)
                 table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*max(table[row2][1])-table[row1][col1])
             if(not(any(s2 in subl for subl in table))):
-                table.append(list[17])
+                table.append([None]*17)
                 table[len(table)-1][0]=s2
                 row1 = index_2d(table,s1)[0]
                 row2 = index_2d(table,s1)[0]
@@ -270,16 +270,16 @@ def QtableUpdate(table,wstate):
                 table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*max(table[row2][1])-table[row1][col1])
         if(not(any(s1 in subl for subl in table))):
             if(any(s2 in subl for subl in table)):
-                table.append(list[17])
+                table.append([None]*17)
                 table[len(table)-1][0]=s1
                 row1 = index_2d(table,s1)[0]
                 row2 = index_2d(table,s1)[0]
                 col1 = getActionNumber(a1)
                 table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*max(table[row2][1])-table[row1][col1])      
             if(not(any(s2 in subl for subl in table))):
-                table.append(list[17])
+                table.append([None]*17)
                 table[len(table)-1][0]=s2
-                table.append(list[17])
+                table.append([None]*17)
                 table[len(table)-1][0]=s1
                 row1 = index_2d(table,s1)[0]
                 row2 = index_2d(table,s1)[0]
