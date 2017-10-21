@@ -23,7 +23,105 @@ import tensorflow as tf
 import numpy as np
 tf.reset_default_graph()
 sess = tf.Session()
-working_state = tf.Variable(tf.random_uniform([4,4],0,3,dtype=tf.int32))  
+working_state = tf.Variable(tf.random_uniform([4,4],0,3,dtype=tf.int32))
+Action1 = [[[1, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0]],[[0, 1, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0]],[[0, 0, 1, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0]],[[0, 0, 0, 1],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0]],[[0, 0, 0, 0],
+       [1, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0]],[[0, 0, 0, 0],
+       [0, 1, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0]],[[0, 0, 0, 0],
+       [0, 0, 1, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0]],[[0, 0, 0, 0],
+       [0, 0, 0, 1],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0]],[[0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [1, 0, 0, 0],
+       [0, 0, 0, 0]],[[0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 1, 0, 0],
+       [0, 0, 0, 0]],[[0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 1, 0],
+       [0, 0, 0, 0]],[[0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 1],
+       [0, 0, 0, 0]],[[0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [1, 0, 0, 0]],[[0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 1, 0, 0]],[[0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 1, 0]],[[0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 1]]]
+Action2 = [[[2, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0]],[[0, 2, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0]],[[0, 0, 2, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0]],[[0, 0, 0, 2],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0]],[[0, 0, 0, 0],
+       [2, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0]],[[0, 0, 0, 0],
+       [0, 2, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0]],[[0, 0, 0, 0],
+       [0, 0, 2, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0]],[[0, 0, 0, 0],
+       [0, 0, 0, 2],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0]],[[0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [2, 0, 0, 0],
+       [0, 0, 0, 0]],[[0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 2, 0, 0],
+       [0, 0, 0, 0]],[[0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 2, 0],
+       [0, 0, 0, 0]],[[0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 2],
+       [0, 0, 0, 0]],[[0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [2, 0, 0, 0]],[[0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 2, 0, 0]],[[0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 2, 0]],[[0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 0],
+       [0, 0, 0, 2]]]  
 Qtable = []
 init = tf.global_variables_initializer()
 sess.run(init)
@@ -145,15 +243,7 @@ def QvalueReward(state):
     temp[i-3] = reward2
     return temp
             
-working_state = RandomState()
 
-''' possibilities:
-    s1 exists s2 exists
-    s1 exists s2 doesnt
-    s1 doesnt exist s2 exists
-    s1 doesnt exist s2 doest exist
-    how to code this out???
-   bruteforce the only way???'''
 
 def QtableUpdate(table,wstate):
     buffer = QvalueReward(wstate)
@@ -199,11 +289,11 @@ def QtableUpdate(table,wstate):
         j==3
         k+=3
 
-'''end of Q-LEARNING TABLE part'''
-
-'''just to unify all the action columns, to easily make state-action pairs'''
 def getActionNumber(action):
-'''dude figure this out easy only, let it return 1 for some defined action, 2 for some other action and so on...
-therefore it can return number from 1 to 16'''
+    for i in range(len(Action1)):
+        if Action1[i]==action or Action2[i]==action:
+            number = i+1
+            break
+    return number      
 
 sess.close()
