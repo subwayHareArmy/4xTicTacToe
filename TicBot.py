@@ -262,7 +262,7 @@ def QtableUpdate(table,wstate):
                 col1 = getActionNumber(a1)
                 table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*max(table[row2][1])-table[row1][col1])
             if(not(any(s2 in subl for subl in table))):
-                table.append(np.zeros(17,dtype=np.int32))
+                table.append(list[17])
                 table[len(table)-1][0]=s2
                 row1 = index_2d(table,s1)[0]
                 row2 = index_2d(table,s1)[0]
@@ -270,16 +270,16 @@ def QtableUpdate(table,wstate):
                 table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*max(table[row2][1])-table[row1][col1])
         if(not(any(s1 in subl for subl in table))):
             if(any(s2 in subl for subl in table)):
-                table.append(np.zeros(17,dtype=np.int32))
+                table.append(list[17])
                 table[len(table)-1][0]=s1
                 row1 = index_2d(table,s1)[0]
                 row2 = index_2d(table,s1)[0]
                 col1 = getActionNumber(a1)
                 table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*max(table[row2][1])-table[row1][col1])      
             if(not(any(s2 in subl for subl in table))):
-                table.append(np.zeros(17,dtype=np.int32))
+                table.append(list[17])
                 table[len(table)-1][0]=s2
-                table.append(np.zeros(17,dtype=np.int32))
+                table.append(list[17])
                 table[len(table)-1][0]=s1
                 row1 = index_2d(table,s1)[0]
                 row2 = index_2d(table,s1)[0]
@@ -294,6 +294,9 @@ def getActionNumber(action):
         if Action1[i]==action or Action2[i]==action:
             number = i+1
             break
-    return number      
+    return number
+
+QtableUpdate(Qtable,RandomState())
+print(Qtable)      
 
 sess.close()
