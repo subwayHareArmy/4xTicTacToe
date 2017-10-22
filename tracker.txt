@@ -1,0 +1,26 @@
+randomstate : accepts: nothing
+	      returns: tensor
+
+takeaction :  accepts: tensor,int
+	      returns: tensor
+
+termstate :   accepts: tensor
+	      returns: boolean
+
+win3 :        accepts: np array 
+	      returns: boolean
+
+qvaluereward: accepts: tensor
+	      returns: np array
+
+tf_count :    accepts: tensor, int
+	      returns: int
+
+actionnumber: accepts: tensor
+	      returns: int
+
+index_2d :    accepts: 
+	      returns:
+
+randomstate : accepts:
+	      returns:
