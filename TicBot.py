@@ -127,9 +127,9 @@ init = tf.global_variables_initializer()
 sess.run(init)
 
 def index_2d(myList, v):
-    for i, x in enumerate(myList):
-        if (v==x):
-            return (i, x.index(v))
+    for i in range(len(myList)):
+        if np.array_equal(myList[i][0],v):
+            return i
 
 def tf_count(t, val):
     elements_equal_to_value = tf.equal(t, val)
@@ -257,32 +257,40 @@ def QtableUpdate(table,wstate):
         s2 = tf.add(s1,a1)
         if(any(s1 in subl for subl in table)):
             if(any(s2 in subl for subl in table)):
-                row1 = index_2d(table,s1)[0]
-                row2 = index_2d(table,s1)[0]
+                row1 = index_2d(table,s1)
+                row2 = index_2d(table,s2)
                 col1 = getActionNumber(a1)
                 table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*max(table[row2][1])-table[row1][col1])
             if(not(any(s2 in subl for subl in table))):
-                table.append([None]*17)
-                table[len(table)-1][0]=s2
-                row1 = index_2d(table,s1)[0]
-                row2 = index_2d(table,s1)[0]
+                table.append([])
+                table[len(table)-1].append(s2)
+                for i in range(16):
+                    table[len(table)-1].append(0)
+                row1 = index_2d(table,s1)
+                row2 = index_2d(table,s1)
                 col1 = getActionNumber(a1)
                 table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*max(table[row2][1])-table[row1][col1])
         if(not(any(s1 in subl for subl in table))):
             if(any(s2 in subl for subl in table)):
-                table.append([None]*17)
-                table[len(table)-1][0]=s1
-                row1 = index_2d(table,s1)[0]
-                row2 = index_2d(table,s1)[0]
+                table.append([])
+                table[len(table)-1].append(s1)
+                for i in range(16):
+                    table[len(table)-1].append(0)
+                row1 = index_2d(table,s1)
+                row2 = index_2d(table,s1)
                 col1 = getActionNumber(a1)
                 table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*max(table[row2][1])-table[row1][col1])      
             if(not(any(s2 in subl for subl in table))):
-                table.append([None]*17)
-                table[len(table)-1][0]=s2
-                table.append([None]*17)
-                table[len(table)-1][0]=s1
-                row1 = index_2d(table,s1)[0]
-                row2 = index_2d(table,s1)[0]
+                table.append([])
+                table[len(table)-1].append(s1)
+                for i in range(16):
+                    table[len(table)-1].append(0)
+                table.append([])
+                table[len(table)-1].append(s2)
+                for i in range(16):
+                    table[len(table)-1].append(0)
+                row1 = index_2d(table,s1)
+                row2 = index_2d(table,s1)
                 col1 = getActionNumber(a1)
                 table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*max(table[row2][1])-table[row1][col1])            
         i+=3
@@ -290,8 +298,9 @@ def QtableUpdate(table,wstate):
         k+=3
 
 def getActionNumber(action):
+    actionp = action
     for i in range(len(Action1)):
-        if Action1[i]==action or Action2[i]==action:
+        if np.array_equal(Action1[i],actionp) or np.array_equal(Action2[i],actionp):
             number = i+1
             break
     return number
