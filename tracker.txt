@@ -19,8 +19,8 @@ tf_count :    accepts: tensor, int
 actionnumber: accepts: tensor
 	      returns: int
 
-index_2d :    accepts: 
-	      returns:
+index_2d :    accepts: matrix,value 
+	      returns: int
 
-randomstate : accepts:
-	      returns:
+Qvalueupdate: accepts: state,table
+	      returns: nothing
