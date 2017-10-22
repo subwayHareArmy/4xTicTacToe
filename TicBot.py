@@ -247,6 +247,7 @@ def QvalueReward(state):
 
 def QtableUpdate(table,wstate):
     buffer = QvalueReward(wstate)
+    t = []
     i=0
     j=1
     k=2
@@ -260,7 +261,9 @@ def QtableUpdate(table,wstate):
                 row1 = index_2d(table,s1)
                 row2 = index_2d(table,s2)
                 col1 = getActionNumber(a1)
-                table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*max(table[row2][1])-table[row1][col1])
+                for i in range (1,16):
+                    t.append(table[row2][i])
+                table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*max(t)-table[row1][col1])
             if(not(any(s2 in subl for subl in table))):
                 table.append([])
                 table[len(table)-1].append(s2)
@@ -269,7 +272,7 @@ def QtableUpdate(table,wstate):
                 row1 = index_2d(table,s1)
                 row2 = index_2d(table,s1)
                 col1 = getActionNumber(a1)
-                table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*max(table[row2][1])-table[row1][col1])
+                table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*max(t)-table[row1][col1])
         if(not(any(s1 in subl for subl in table))):
             if(any(s2 in subl for subl in table)):
                 table.append([])
@@ -279,7 +282,7 @@ def QtableUpdate(table,wstate):
                 row1 = index_2d(table,s1)
                 row2 = index_2d(table,s1)
                 col1 = getActionNumber(a1)
-                table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*max(table[row2][1])-table[row1][col1])      
+                table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*max(t)-table[row1][col1])      
             if(not(any(s2 in subl for subl in table))):
                 table.append([])
                 table[len(table)-1].append(s1)
@@ -292,7 +295,7 @@ def QtableUpdate(table,wstate):
                 row1 = index_2d(table,s1)
                 row2 = index_2d(table,s1)
                 col1 = getActionNumber(a1)
-                table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*max(table[row2][1])-table[row1][col1])            
+                table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*max(t)-table[row1][col1])            
         i+=3
         j==3
         k+=3
