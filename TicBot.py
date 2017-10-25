@@ -1,23 +1,3 @@
-#############################################################################################
-#Random State Generator DONE!
-
-#TakeAction function DONE!!!!!!
-
-#Q value calculator:
-    #Take State 
-    #Choose rendom action
-    #Loop till terminal state
-    #Provide end reward and backprop
-
-#Q matrix update
-    #if state exists, calculate q value and do q += qnew
-    #if new state, add state to q matrix, calculate q value and do q = qnew
-    #repeat for A LOT of iterations
-
-#FCC net train
-
-#convert to game (MAYBE?????)
-#############################################################################################
 
 import tensorflow as tf
 import numpy as np
