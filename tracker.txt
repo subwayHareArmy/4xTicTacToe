@@ -16,7 +16,9 @@
 
 #FCC net train
 
-#Make turn wise generator of randdom states
+#Make turn wise generator of random states (Check if it's faster than the one we have. If so replace after extensive testing)
+#We're taking lite on terminal states corresponding to ties (Based on speculation that there might be just 2 states involving a tie)
+#Try to make the TakeAction function more efficient if possible (Play in only one of the zeros)
 
 #convert to game (MAYBE?????)
 #############################################################################################
