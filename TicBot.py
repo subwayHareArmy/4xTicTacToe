@@ -203,6 +203,7 @@ def TermStateCheck(state):
     
     
 def QvalueReward(state):
+    whoWonFlag = 2
     temp = []
     while not(TermStateCheck(state)):
         temp.append(sess.run(state))
@@ -210,6 +211,9 @@ def QvalueReward(state):
         temp.append(sess.run(action))
         temp.append(0)
         state = tf.add(state,action)
+        if TermStateCheck(state):
+              whoWonFlag = 1
+              break
         temp.append(sess.run(state))
         action = TakeAction(state,2)
         temp.append(sess.run(action))
@@ -220,7 +224,8 @@ def QvalueReward(state):
     reward2 = -1
     i = length-1
     temp[i] = reward1
-    temp[i-3] = reward2
+    if whoWonflag == 2:
+       temp[i-3] = reward2   
     return temp
             
 
