@@ -1,0 +1,51 @@
+#############################################################################################
+#Random State Generator DONE!
+
+#TakeAction function DONE!!!!!!
+
+#Q value calculator:
+    #Take State 
+    #Choose rendom action
+    #Loop till terminal state
+    #Provide end reward and backprop
+
+#Q matrix update
+    #if state exists, calculate q value and do q += qnew
+    #if new state, add state to q matrix, calculate q value and do q = qnew
+    #repeat for A LOT of iterations
+
+#FCC net train
+
+#Make turn wise generator of random states (Check if it's faster than the one we have. If so replace after extensive testing)
+#We're taking lite on terminal states corresponding to ties (Based on speculation that there might be just 2 states involving a tie)
+#Try to make the TakeAction function more efficient if possible (Play in only one of the zeros)
+
+#convert to game (MAYBE?????)
+#############################################################################################
+
+randomstate : accepts: nothing
+	      returns: tensor
+
+takeaction :  accepts: tensor,int
+	      returns: tensor
+
+termstate :   accepts: tensor
+	      returns: boolean
+
+win3 :        accepts: np array 
+	      returns: boolean
+
+qvaluereward: accepts: tensor
+	      returns: np array
+
+tf_count :    accepts: tensor, int
+	      returns: int
+
+actionnumber: accepts: tensor
+	      returns: int
+
+index_2d :    accepts: matrix,value 
+	      returns: int
+
+Qvalueupdate: accepts: state,table
+	      returns: nothing
