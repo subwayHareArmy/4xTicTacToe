@@ -228,20 +228,26 @@ def QvalueReward(state):
     return temp
             
 
-
 def QtableUpdate(table,wstate):
     buffer = QvalueReward(wstate)
-    i=0
-    j=1
-    k=2
-    while(k<len(buffer)):
-        s1=buffer[i]
-        a1=buffer[j]
-        r1=buffer[k]
+    l=0
+    m=1
+    n=2
+    while(n<len(buffer)):
+        s1=buffer[l]
+        a1=buffer[m]
+        r1=buffer[n]
         s2 = tf.add(s1,a1)
         maxele = 0
-        if(any(s1 in subl for subl in table)):
-            if(any(s2 in subl for subl in table)):
+        s1present = False
+        s2present = False
+        for checker in range(len(table)):
+            if(np.array_equal(table[checker][0],s1)):
+                s1present = True
+            if(np.array_equal(table[checker][0],s2)):
+                s2present = True
+        if(s1present):
+            if(s2present):
                 row1 = index_2d(table,s1)
                 row2 = index_2d(table,s2)
                 col1 = getActionNumber(a1)
@@ -261,8 +267,8 @@ def QtableUpdate(table,wstate):
                     if table[row2][i] > maxele:
                         maxele = table[row2][i]
                 table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*maxele-table[row1][col1])
-        if(not(any(s1 in subl for subl in table))):
-            if(any(s2 in subl for subl in table)):
+        if(not(s1present)):
+            if(s2present):
                 table.append([])
                 table[len(table)-1].append(s1)
                 for i in range(16):
@@ -274,7 +280,7 @@ def QtableUpdate(table,wstate):
                     if table[row2][i] > maxele:
                         maxele = table[row2][i]
                 table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*maxele-table[row1][col1])      
-            if(not(any(s2 in subl for subl in table))):
+            if(not(s2present)):
                 table.append([])
                 table[len(table)-1].append(s1)
                 for i in range(16):
@@ -289,10 +295,11 @@ def QtableUpdate(table,wstate):
                 for i in range (1,16):
                     if table[row2][i] > maxele:
                         maxele = table[row2][i]
-                table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*maxele-table[row1][col1])            
-        i+=3
-        j==3
-        k+=3
+                table[row1][col1 ]+= 0.25*(r1 + 0.9*maxele-table[row1][col1])            
+        l+=3
+        m==3
+        n+=3
+
 
 def getActionNumber(action):
     actionp = action
