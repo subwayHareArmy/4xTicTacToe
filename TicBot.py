@@ -223,7 +223,7 @@ def QvalueReward(state):
     reward2 = -1
     i = length-1
     temp[i] = reward1
-    if whoWonflag == 2:
+    if whoWonFlag == 2:
        temp[i-3] = reward2   
     return temp
             
@@ -303,5 +303,7 @@ def getActionNumber(action):
     return number
     
          
-
+working_state = RandomState()
+QtableUpdate(Qtable,working_state)
+print(Qtable)
 sess.close()
