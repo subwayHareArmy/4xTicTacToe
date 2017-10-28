@@ -237,7 +237,7 @@ def QtableUpdate(table,wstate):
         s1=buffer[l]
         a1=buffer[m]
         r1=buffer[n]
-        s2 = tf.add(s1,a1)
+        s2 = sess.run(tf.add(s1,a1))
         maxele = 0
         s1present = False
         s2present = False
@@ -255,7 +255,7 @@ def QtableUpdate(table,wstate):
                     if table[row2][i] > maxele:
                         maxele = table[row2][i]
                 table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*maxele-table[row1][col1])
-            if(not(any(s2 in subl for subl in table))):
+            if(not(s2present)):
                 table.append([])
                 table[len(table)-1].append(s2)
                 for i in range(16):
