@@ -1,4 +1,3 @@
-
 import tensorflow as tf
 import numpy as np
 tf.reset_default_graph()
@@ -256,7 +255,7 @@ def QtableUpdate(table,wstate):
                 for i in range(16):
                     table[len(table)-1].append(0)
                 row1 = index_2d(table,s1)
-                row2 = index_2d(table,s1)
+                row2 = index_2d(table,s2)
                 col1 = getActionNumber(a1)
                 for i in range (1,16):
                     if table[row2][i] > maxele:
@@ -269,7 +268,7 @@ def QtableUpdate(table,wstate):
                 for i in range(16):
                     table[len(table)-1].append(0)
                 row1 = index_2d(table,s1)
-                row2 = index_2d(table,s1)
+                row2 = index_2d(table,s2)
                 col1 = getActionNumber(a1)
                 for i in range (1,16):
                     if table[row2][i] > maxele:
@@ -285,7 +284,7 @@ def QtableUpdate(table,wstate):
                 for i in range(16):
                     table[len(table)-1].append(0)
                 row1 = index_2d(table,s1)
-                row2 = index_2d(table,s1)
+                row2 = index_2d(table,s2)
                 col1 = getActionNumber(a1)
                 for i in range (1,16):
                     if table[row2][i] > maxele:
@@ -302,8 +301,7 @@ def getActionNumber(action):
             number = i+1
             break
     return number
-
-QtableUpdate(Qtable,RandomState())
-print(Qtable)      
+    
+         
 
 sess.close()
