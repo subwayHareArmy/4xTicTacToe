@@ -1,4 +1,5 @@
 import tensorflow as tf
+import time
 import numpy as np
 tf.reset_default_graph()
 sess = tf.Session()
@@ -101,7 +102,8 @@ Action2 = [[[2, 0, 0, 0],
        [0, 0, 0, 0],
        [0, 0, 0, 0],
        [0, 0, 0, 2]]]  
-Qtable = []
+Qtable = np.load('Qtable.npy')
+Qtable = Qtable.tolist()
 init = tf.global_variables_initializer()
 sess.run(init)
 
@@ -254,7 +256,7 @@ def QtableUpdate(table,wstate):
                 for i in range (1,16):
                     if table[row2][i] > maxele:
                         maxele = table[row2][i]
-                table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*maxele-table[row1][col1])
+                table[row1][col1 ]+= r1 + 0.9*maxele-table[row1][col1]
             if(not(s2present)):
                 table.append([])
                 table[len(table)-1].append(s2)
@@ -266,7 +268,7 @@ def QtableUpdate(table,wstate):
                 for i in range (1,16):
                     if table[row2][i] > maxele:
                         maxele = table[row2][i]
-                table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*maxele-table[row1][col1])
+                table[row1][col1 ]+= r1 + 0.9*maxele-table[row1][col1]
         if(not(s1present)):
             if(s2present):
                 table.append([])
@@ -279,7 +281,7 @@ def QtableUpdate(table,wstate):
                 for i in range (1,16):
                     if table[row2][i] > maxele:
                         maxele = table[row2][i]
-                table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*maxele-table[row1][col1])      
+                table[row1][col1 ]+= r1 + 0.9*maxele-table[row1][col1]      
             if(not(s2present)):
                 table.append([])
                 table[len(table)-1].append(s1)
@@ -295,7 +297,7 @@ def QtableUpdate(table,wstate):
                 for i in range (1,16):
                     if table[row2][i] > maxele:
                         maxele = table[row2][i]
-                table[row1][col1 ]+= 0.25*(r1 + 0.9*maxele-table[row1][col1])            
+                table[row1][col1 ]+= r1 + 0.9*maxele-table[row1][col1]           
         l+=3
         m==3
         n+=3
@@ -308,9 +310,10 @@ def getActionNumber(action):
             number = i+1
             break
     return number
-    
-         
-working_state = RandomState()
-QtableUpdate(Qtable,working_state)
-print(Qtable)
+start = time.time()
+for i in range(0):
+    working_state = RandomState()
+    QtableUpdate(Qtable,working_state)
+print(len(Qtable))
+np.save('Qtable.npy',Qtable)
 sess.close()
