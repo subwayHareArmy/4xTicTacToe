@@ -1,9 +1,5 @@
-import tensorflow as tf
 import time
 import numpy as np
-tf.reset_default_graph()
-sess = tf.Session()
-working_state = tf.Variable(tf.random_uniform([4,4],0,3,dtype=tf.int32))
 Action1 = [[[1, 0, 0, 0],
        [0, 0, 0, 0],
        [0, 0, 0, 0],
@@ -104,45 +100,28 @@ Action2 = [[[2, 0, 0, 0],
        [0, 0, 0, 2]]]  
 Qtable = np.load('Qtable.npy')
 Qtable = Qtable.tolist()
-init = tf.global_variables_initializer()
-sess.run(init)
 
 def index_2d(myList, v):
     for i in range(len(myList)):
         if np.array_equal(myList[i][0],v):
             return i
-
-def tf_count(t, val):
-    elements_equal_to_value = tf.equal(t, val)
-    as_ints = tf.cast(elements_equal_to_value, tf.int32)
-    count = tf.reduce_sum(as_ints)
-    return count
       
 def RandomState():
-    z1 = tf.Variable(tf.random_uniform([4,4],0,3,dtype=tf.int32))
-    init_new_vars_op = tf.initialize_variables([z1])
-    sess.run(init_new_vars_op)
-    assign_op = z1.assign(tf.random_uniform([4,4],0,3,dtype=tf.int32))
     while(1):
-        sess.run(assign_op)
-        if sess.run(tf.count_nonzero(z1))%2==0:
-            if sess.run(tf_count(z1,1))==sess.run(tf_count(z1,2)):
+        z1 = np.random.randint(3,size = (4,4), dtype=np.int32)
+        if np.count_nonzero(z1)%2==0:
+            if np.count_nonzero(z1 == 1)==np.count_nonzero(z1 == 2):
                 if not(TermStateCheck(z1)):
                     break
     return z1
     
 def TakeAction(state,playernum):
-    action = tf.Variable(tf.zeros([4,4],dtype=tf.int32))
-    init_new_vars_op = tf.initialize_variables([action])
-    sess.run(init_new_vars_op)
-    z = np.zeros((4,4),dtype=np.int32)
+    action = np.zeros([4,4],dtype=np.int32)
     while(1):
         i = np.random.randint(0,3)
         j = np.random.randint(0,3)
-        if(sess.run(state)[i][j]==0):
-            z[i][j] = playernum
-            z_tf = tf.convert_to_tensor(z,dtype=tf.int32)
-            action = tf.add(z_tf,action)
+        if state[i][j]==0:
+            action[i][j] = playernum
             break
     return action
    
@@ -169,7 +148,7 @@ def win3(x,t):
     
     
 def TermStateCheck(state):
-    state_array = np.asanyarray(sess.run(state))
+    state_array = np.asanyarray(state)
     x1 = np.empty([3,3],dtype = np.int32)
     for i in range(3):
         for j in range(3):      
@@ -207,19 +186,19 @@ def QvalueReward(state):
     whoWonFlag = 2
     temp = []
     while not(TermStateCheck(state)):
-        temp.append(sess.run(state))
+        temp.append(state)
         action = TakeAction(state,1)
-        temp.append(sess.run(action))
+        temp.append(action)
         temp.append(0)
-        state = tf.add(state,action)
+        state = np.add(state,action)
         if TermStateCheck(state):
               whoWonFlag = 1
               break
-        temp.append(sess.run(state))
+        temp.append(state)
         action = TakeAction(state,2)
-        temp.append(sess.run(action))
+        temp.append(action)
         temp.append(0)
-        state = tf.add(state,action)
+        state = np.add(state,action)
     length = len(temp)
     reward1 = 1
     reward2 = -1
@@ -239,7 +218,7 @@ def QtableUpdate(table,wstate):
         s1=buffer[l]
         a1=buffer[m]
         r1=buffer[n]
-        s2 = sess.run(tf.add(s1,a1))
+        s2 = np.add(s1,a1)
         maxele = 0
         s1present = False
         s2present = False
@@ -315,5 +294,5 @@ for i in range(0):
     working_state = RandomState()
     QtableUpdate(Qtable,working_state)
 print(len(Qtable))
+print(time.time()-start)
 np.save('Qtable.npy',Qtable)
-sess.close()
