@@ -1,8 +1,6 @@
 import numpy as np
-import time
-       
-Qtable = np.load('Qtable.npy')
-Qtable = Qtable.tolist()
+    
+Qtable = []
 
 def index_2d(myList, v):
     for i in range(len(myList)):
@@ -26,7 +24,6 @@ def TakeAction(state,playernum):
         if state[i][j]==0:
             action[i][j] = playernum
             break
-    print(action)
     return action
    
 def win3(x,t):
@@ -84,13 +81,15 @@ def TermStateCheck(state):
         
     return False   
 
-def QtableUpdate2(table,wstate):   
+def QtableUpdate(table,wstate):   
     s1 = np.asanyarray(wstate)
-    playernum = 2
-    if np.count_nonzero(s1)% 2 == 0:
-        playernum = 1
+    print(s1)
+    playernum = 1
     action = TakeAction(wstate,playernum)
-    s2 = np.add(wstate,action)    
+    print(action)
+    s2 = np.add(wstate,action)
+    print(s2)
+    print(TermStateCheck(s1),TermStateCheck(s2))    
     s1present = False
     s2present = False
     maxele = 0
@@ -152,7 +151,7 @@ def QtableUpdate2(table,wstate):
                 table[len(table)-1].append(0)
             row1 = index_2d(table,s1)
             row2 = index_2d(table,s2)
-            col1 = getActionNumber(action)
+            col1 = getActionNumber(action,playernum)
             for i in range (1,16):
                 if table[row2][i] > maxele:
                     maxele = table[row2][i]
@@ -173,5 +172,6 @@ def getActionNumber(action,num):
     row,col = action.nonzero()
     return row[0]*4 + col[0] + 1
 
-
+QtableUpdate(Qtable,RandomState())
+print(Qtable)
       
