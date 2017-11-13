@@ -1,5 +1,5 @@
 import numpy as np
-    
+import time
 Qtable = []
 
 def index_2d(myList, v):
@@ -10,17 +10,15 @@ def index_2d(myList, v):
 def RandomState():
     while(1):
         z1 = np.random.randint(3,size = (4,4), dtype=np.int32)
-        if np.count_nonzero(z1)%2==0:
-            if np.count_nonzero(z1 == 1)==np.count_nonzero(z1 == 2):
-                if not(TermStateCheck(z1)):
-                    break
+        if np.count_nonzero(z1)%2==0 and np.count_nonzero(z1 == 1)==np.count_nonzero(z1 == 2) and not(TermStateCheck(z1)):
+            break
     return z1
     
 def TakeAction(state,playernum):
     action = np.zeros([4,4],dtype=np.int32)
     while(1):
-        i = np.random.randint(0,3)
-        j = np.random.randint(0,3)
+        i = np.random.randint(0,4)
+        j = np.random.randint(0,4)
         if state[i][j]==0:
             action[i][j] = playernum
             break
@@ -78,18 +76,17 @@ def TermStateCheck(state):
 
     if win3(x1,1) or win3(x1,2):
          return True
+    
+    if(np.count_nonzero(state_array)==16):
+        return True
         
     return False   
 
 def QtableUpdate(table,wstate):   
     s1 = np.asanyarray(wstate)
-    print(s1)
     playernum = 1
     action = TakeAction(wstate,playernum)
-    print(action)
-    s2 = np.add(wstate,action)
-    print(s2)
-    print(TermStateCheck(s1),TermStateCheck(s2))    
+    s2 = np.add(wstate,action)  
     s1present = False
     s2present = False
     maxele = 0
@@ -172,6 +169,8 @@ def getActionNumber(action,num):
     row,col = action.nonzero()
     return row[0]*4 + col[0] + 1
 
-QtableUpdate(Qtable,RandomState())
-print(Qtable)
-      
+
+start = time.time()
+for i in range(1000):
+    QtableUpdate(Qtable,RandomState())
+print(time.time()-start)
