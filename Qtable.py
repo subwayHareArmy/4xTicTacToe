@@ -1,108 +1,8 @@
 import numpy as np
 import time
-Action1 = [[[1, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0]],[[0, 1, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0]],[[0, 0, 1, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0]],[[0, 0, 0, 1],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0]],[[0, 0, 0, 0],
-       [1, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0]],[[0, 0, 0, 0],
-       [0, 1, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0]],[[0, 0, 0, 0],
-       [0, 0, 1, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0]],[[0, 0, 0, 0],
-       [0, 0, 0, 1],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0]],[[0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [1, 0, 0, 0],
-       [0, 0, 0, 0]],[[0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 1, 0, 0],
-       [0, 0, 0, 0]],[[0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 1, 0],
-       [0, 0, 0, 0]],[[0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 1],
-       [0, 0, 0, 0]],[[0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [1, 0, 0, 0]],[[0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 1, 0, 0]],[[0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 1, 0]],[[0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 1]]]
-Action2 = [[[2, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0]],[[0, 2, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0]],[[0, 0, 2, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0]],[[0, 0, 0, 2],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0]],[[0, 0, 0, 0],
-       [2, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0]],[[0, 0, 0, 0],
-       [0, 2, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0]],[[0, 0, 0, 0],
-       [0, 0, 2, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0]],[[0, 0, 0, 0],
-       [0, 0, 0, 2],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0]],[[0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [2, 0, 0, 0],
-       [0, 0, 0, 0]],[[0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 2, 0, 0],
-       [0, 0, 0, 0]],[[0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 2, 0],
-       [0, 0, 0, 0]],[[0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 2],
-       [0, 0, 0, 0]],[[0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [2, 0, 0, 0]],[[0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 2, 0, 0]],[[0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 2, 0]],[[0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 0],
-       [0, 0, 0, 2]]]
        
-Qtable =[[np.array([[1, 2, 2, 0],
-       [1, 2, 0, 0],
-       [0, 0, 1, 1],
-       [1, 2, 0, 1]],dtype = np.int32),0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[np.zeros((4,4),dtype=np.int32),0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
+Qtable = np.load('Qtable.npy')
+Qtable = Qtable.tolist()
 
 def index_2d(myList, v):
     for i in range(len(myList)):
@@ -126,6 +26,7 @@ def TakeAction(state,playernum):
         if state[i][j]==0:
             action[i][j] = playernum
             break
+    print(action)
     return action
    
 def win3(x,t):
@@ -215,7 +116,7 @@ def QtableUpdate2(table,wstate):
                     table[len(table)-1].append(0)
                 row1 = index_2d(table,s1)
                 row2 = index_2d(table,s2)
-                col1 = getActionNumber(action)
+                col1 = getActionNumber(action,playernum)
                 for i in range (1,16):
                     if table[row2][i] > maxele:
                         maxele = table[row2][i]
@@ -223,7 +124,7 @@ def QtableUpdate2(table,wstate):
 
             if(not(s2present) and TermStateCheck(s2)):
                 row1 = index_2d(table,s1)
-                col1 = getActionNumber(action)
+                col1 = getActionNumber(action,playernum)
                 table[row1][col1 ] = 1
     
     if(not(s1present) and not(TermStateCheck(s1))):
@@ -234,7 +135,7 @@ def QtableUpdate2(table,wstate):
                     table[len(table)-1].append(0)
                 row1 = index_2d(table,s1)
                 row2 = index_2d(table,s2)
-                col1 = getActionNumber(action)
+                col1 = getActionNumber(action,playernum)
                 for i in range (1,16):
                     if table[row2][i] > maxele:
                         maxele = table[row2][i]
@@ -264,21 +165,13 @@ def QtableUpdate2(table,wstate):
              for i in range(16):
                  table[len(table)-1].append(0)
              row1 = index_2d(table,s1)
-             col1 = getActionNumber(action)
+             col1 = getActionNumber(action,playernum)
              table[row1][col1 ] = 1 
 
 
-def getActionNumber(action):
-    actionp = action
-    for i in range(len(Action1)):
-        if(np.array_equal(Action1[i],actionp) or np.array_equal(Action2[i],actionp)):
-            number = i+1
-            break
-    return number
+def getActionNumber(action,num):
+    row,col = action.nonzero()
+    return row[0]*4 + col[0] + 1
 
 
-start = time.time()
-for i in range(10):    
-    QtableUpdate2(Qtable,RandomState())
-print(time.time()-start)
-        
+      
