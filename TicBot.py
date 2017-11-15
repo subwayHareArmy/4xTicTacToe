@@ -124,6 +124,16 @@ def TakeAction(state,playernum):
             action[i][j] = playernum
             break
     return action
+
+def RemoveAction(state,playernum):
+    action = np.zeros([4,4],dtype=np.int32)
+    while(1):
+        i = np.random.randint(0,4)
+        j = np.random.randint(0,4)
+        if state[i][j] == playernum:
+            action[i][j] = - playernum
+            break
+    return action
    
 def win3(x,t):
     if x[0][0] == t and x[0][1] == t and x[0][2] == t:
