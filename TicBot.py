@@ -1,9 +1,5 @@
-
-import tensorflow as tf
+import time
 import numpy as np
-tf.reset_default_graph()
-sess = tf.Session()
-working_state = tf.Variable(tf.random_uniform([4,4],0,3,dtype=tf.int32))
 Action1 = [[[1, 0, 0, 0],
        [0, 0, 0, 0],
        [0, 0, 0, 0],
@@ -102,46 +98,30 @@ Action2 = [[[2, 0, 0, 0],
        [0, 0, 0, 0],
        [0, 0, 0, 0],
        [0, 0, 0, 2]]]  
-Qtable = []
-init = tf.global_variables_initializer()
-sess.run(init)
+Qtable = np.load('Qtable.npy')
+Qtable = Qtable.tolist()
 
 def index_2d(myList, v):
     for i in range(len(myList)):
         if np.array_equal(myList[i][0],v):
             return i
-
-def tf_count(t, val):
-    elements_equal_to_value = tf.equal(t, val)
-    as_ints = tf.cast(elements_equal_to_value, tf.int32)
-    count = tf.reduce_sum(as_ints)
-    return count
       
 def RandomState():
-    z1 = tf.Variable(tf.random_uniform([4,4],0,3,dtype=tf.int32))
-    init_new_vars_op = tf.initialize_variables([z1])
-    sess.run(init_new_vars_op)
-    assign_op = z1.assign(tf.random_uniform([4,4],0,3,dtype=tf.int32))
     while(1):
-        sess.run(assign_op)
-        if sess.run(tf.count_nonzero(z1))%2==0:
-            if sess.run(tf_count(z1,1))==sess.run(tf_count(z1,2)):
+        z1 = np.random.randint(3,size = (4,4), dtype=np.int32)
+        if np.count_nonzero(z1)%2==0:
+            if np.count_nonzero(z1 == 1)==np.count_nonzero(z1 == 2):
                 if not(TermStateCheck(z1)):
                     break
     return z1
     
 def TakeAction(state,playernum):
-    action = tf.Variable(tf.zeros([4,4],dtype=tf.int32))
-    init_new_vars_op = tf.initialize_variables([action])
-    sess.run(init_new_vars_op)
-    z = np.zeros((4,4),dtype=np.int32)
+    action = np.zeros([4,4],dtype=np.int32)
     while(1):
         i = np.random.randint(0,3)
         j = np.random.randint(0,3)
-        if(sess.run(state)[i][j]==0):
-            z[i][j] = playernum
-            z_tf = tf.convert_to_tensor(z,dtype=tf.int32)
-            action = tf.add(z_tf,action)
+        if state[i][j]==0:
+            action[i][j] = playernum
             break
     return action
    
@@ -168,7 +148,7 @@ def win3(x,t):
     
     
 def TermStateCheck(state):
-    state_array = np.asanyarray(sess.run(state))
+    state_array = np.asanyarray(state)
     x1 = np.empty([3,3],dtype = np.int32)
     for i in range(3):
         for j in range(3):      
@@ -206,76 +186,82 @@ def QvalueReward(state):
     whoWonFlag = 2
     temp = []
     while not(TermStateCheck(state)):
-        temp.append(sess.run(state))
+        temp.append(state)
         action = TakeAction(state,1)
-        temp.append(sess.run(action))
+        temp.append(action)
         temp.append(0)
-        state = tf.add(state,action)
+        state = np.add(state,action)
         if TermStateCheck(state):
               whoWonFlag = 1
               break
-        temp.append(sess.run(state))
+        temp.append(state)
         action = TakeAction(state,2)
-        temp.append(sess.run(action))
+        temp.append(action)
         temp.append(0)
-        state = tf.add(state,action)
+        state = np.add(state,action)
     length = len(temp)
     reward1 = 1
     reward2 = -1
     i = length-1
     temp[i] = reward1
-    if whoWonflag == 2:
+    if whoWonFlag == 2:
        temp[i-3] = reward2   
     return temp
             
 
-
 def QtableUpdate(table,wstate):
     buffer = QvalueReward(wstate)
-    i=0
-    j=1
-    k=2
-    while(k<len(buffer)):
-        s1=buffer[i]
-        a1=buffer[j]
-        r1=buffer[k]
-        s2 = tf.add(s1,a1)
+    l=0
+    m=1
+    n=2
+    while(n<len(buffer)):
+        s1=buffer[l]
+        a1=buffer[m]
+        r1=buffer[n]
+        s2 = np.add(s1,a1)
         maxele = 0
-        if(any(s1 in subl for subl in table)):
-            if(any(s2 in subl for subl in table)):
+        s1present = False
+        s2present = False
+        for checker in range(len(table)):
+            if(np.array_equal(table[checker][0],s1)):
+                s1present = True
+            if(np.array_equal(table[checker][0],s2)):
+                s2present = True
+        if(s1present):
+            if(s2present):
                 row1 = index_2d(table,s1)
                 row2 = index_2d(table,s2)
                 col1 = getActionNumber(a1)
                 for i in range (1,16):
                     if table[row2][i] > maxele:
                         maxele = table[row2][i]
-                table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*maxele-table[row1][col1])
-            if(not(any(s2 in subl for subl in table))):
+                table[row1][col1 ]+= r1 + 0.9*maxele-table[row1][col1]
+            if(not(s2present)):
                 table.append([])
                 table[len(table)-1].append(s2)
                 for i in range(16):
                     table[len(table)-1].append(0)
                 row1 = index_2d(table,s1)
-                row2 = index_2d(table,s1)
+                row2 = index_2d(table,s2)
                 col1 = getActionNumber(a1)
                 for i in range (1,16):
                     if table[row2][i] > maxele:
                         maxele = table[row2][i]
-                table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*maxele-table[row1][col1])
-        if(not(any(s1 in subl for subl in table))):
-            if(any(s2 in subl for subl in table)):
+                table[row1][col1 ]+= r1 + 0.9*maxele-table[row1][col1]
+        if(not(s1present)):
+            if(s2present):
                 table.append([])
                 table[len(table)-1].append(s1)
                 for i in range(16):
                     table[len(table)-1].append(0)
                 row1 = index_2d(table,s1)
-                row2 = index_2d(table,s1)
+                row2 = index_2d(table,s2)
                 col1 = getActionNumber(a1)
                 for i in range (1,16):
                     if table[row2][i] > maxele:
                         maxele = table[row2][i]
-                table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*maxele-table[row1][col1])      
-            if(not(any(s2 in subl for subl in table))):
+                table[row1][col1 ]+= r1 + 0.9*maxele-table[row1][col1]      
+            if(not(s2present)):
                 table.append([])
                 table[len(table)-1].append(s1)
                 for i in range(16):
@@ -285,15 +271,16 @@ def QtableUpdate(table,wstate):
                 for i in range(16):
                     table[len(table)-1].append(0)
                 row1 = index_2d(table,s1)
-                row2 = index_2d(table,s1)
+                row2 = index_2d(table,s2)
                 col1 = getActionNumber(a1)
                 for i in range (1,16):
                     if table[row2][i] > maxele:
                         maxele = table[row2][i]
-                table[row1][col1] = table[row1][col1] + 0.25(r1 + 0.9*maxele-table[row1][col1])            
-        i+=3
-        j==3
-        k+=3
+                table[row1][col1 ]+= r1 + 0.9*maxele-table[row1][col1]           
+        l+=3
+        m==3
+        n+=3
+
 
 def getActionNumber(action):
     actionp = action
@@ -302,8 +289,10 @@ def getActionNumber(action):
             number = i+1
             break
     return number
-
-QtableUpdate(Qtable,RandomState())
-print(Qtable)      
-
-sess.close()
+start = time.time()
+for i in range(0):
+    working_state = RandomState()
+    QtableUpdate(Qtable,working_state)
+print(len(Qtable))
+print(time.time()-start)
+np.save('Qtable.npy',Qtable)

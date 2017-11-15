@@ -29,6 +29,9 @@ randomstate : accepts: nothing
 takeaction :  accepts: tensor,int
 	      returns: tensor
 
+removeaction :  accepts: tensor,int
+	      returns: tensor
+
 termstate :   accepts: tensor
 	      returns: boolean
 
